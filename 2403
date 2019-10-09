@@ -60,7 +60,7 @@ def day_ratio(d,c):  # d:적위, c:위도
         return 0  # 전몰성
     r = math.acos(-math.tan(math.radians(d))*math.tan(math.radians(c)))
     r_real = math.degrees(r)* 2
-    r_daytime = r_real/360
+    r_daytime = r_real/360  # daytime = (arccos(tan적위*tan위도)/pi)*24h
     return r_daytime
 
 def timecon(time): # 소수로 주어지는 시각을 시, 분, 초로 쪼개주는 함수
@@ -68,9 +68,9 @@ def timecon(time): # 소수로 주어지는 시각을 시, 분, 초로 쪼개주
     hour = int(time)  # 시:입력한 시각의 정수부분
     minute = int((time - hour)*60)  # 분
     sec = int(((time - hour)*60 - minute)*60) # 초 
-    listtime.append(hour)  # 리스트에 append
+    listtime.append(hour)  
     listtime.append(minute)
-    listtime.append(sec)
+    listtime.append(sec)  # 리스트에 시, 분, 초 append
     return listtime
 
 def decsun(mm,dd):  # mm:월, dd: 일 
@@ -78,7 +78,33 @@ def decsun(mm,dd):  # mm:월, dd: 일
     cnt_date = 0  # 초기값 0
     for i in range(mm-1):  # mn-1이하 범위의 i에 대해
         cnt_date += listmonth[i]  # 리스트[i]값을 cnt_date에 추가
-    cnt_date += dd  # 
+    cnt_date += dd  # cnt_date에 '일' 추가  
+    
+dec = 23.45 * math.sin(math.radians(((285 + cnt_date)/365)*360))  # 태양의 적위 구하는 함수
+    return dec
+    
+    ...
+    
+ def risetime(ratio):  # 뜨는 시각
+    if ratio == 1:
+        return '주극성'
+    elif ratio == 0:
+        return '전몰성'
+    else: 
+        daytime = ratio*24  # 주극성일 경우 daytime = 1*24시간, 전몰성일 겨우 daytime = 0*24시간 
+        time_starrise = starhigh(asc_star) - daytime/2  # 뜨는 시각 = 남중시각 - 떠있는시간의 절반
+        return time_starrise
+        
+def settime(ratio):
+    if ratio == 1:
+        return '주극성'
+    elif ratio == 0:
+        return '전몰성'
+    else: 
+        daytime = ratio*24
+        time_starset = starhigh(asc_star) + daytime/2  # 지는 시각 = 남중시각 + 떠있는시간의 절반
+        return time_starset
+        
 5)내가 기여한 내용에 대한 설명
 주석을 달았다.
 6)내가 기여한 내용의 반영 여부 : x
